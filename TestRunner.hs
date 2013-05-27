@@ -4,16 +4,22 @@ import Debug.Trace
 import NorthWestCornerInitialSolutionFinder
 import TestSet
 import MyArrayUtils
+import TransportationTaskCommon
 
-testNorthWestCornerInitialSolutionFinder testNumber = 
+toNorthWestCornerInitialSolutionFinderArguments :: 
+	(Element t) => TransportationTask t -> (NormalArray t, NormalArray t)
+toNorthWestCornerInitialSolutionFinderArguments (TransportationTask supply demand costs) =
+	(supply, demand)
+	
+
+testNorthWestCornerInitialSolutionFinder taskNumer = 
 	putStr
 		(
 			normal2DArrayToString
 			(
-				getNorthWestCornerInitialSolution 
-					(fst chosenTestSet)
-					(snd chosenTestSet)
+				getNorthWestCornerInitialSolution (fst arguments) (snd arguments)
 			)
 		)
 	where
-		chosenTestSet = testSet !! testNumber
+		task = taskSet !! taskNumer
+		arguments = toNorthWestCornerInitialSolutionFinderArguments task

@@ -8,10 +8,10 @@ where
 import MyArrayUtils
 import Data.Array
 import MyTrace
+import TransportationTaskCommon
 
 data IterationArguments x = IterationArguments (NormalArray x) (NormalArray x) Int Int
 type IterationResult x = [((Int, Int), x)]
-type Element t = (Num t, Ord t, Show t)
 
 performIteration :: (Element t) => IterationArguments t -> IterationResult t
 performIteration (IterationArguments supply demand supplyIndex demandIndex) =
