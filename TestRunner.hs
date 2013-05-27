@@ -1,10 +1,11 @@
 module TestRunner where
 
 import Debug.Trace
-import NorthWestCornerInitialSolutionFinder
-import TestSet
 import MyArrayUtils
 import TransportationTaskCommon
+import NorthWestCornerInitialSolutionFinder
+import MinimalCostInitialSolutionFinder
+import TestSet
 
 toNorthWestCornerInitialSolutionFinderArguments :: 
 	(Element t) => TransportationTask t -> (NormalArray t, NormalArray t)
@@ -12,7 +13,7 @@ toNorthWestCornerInitialSolutionFinderArguments (TransportationTask supply deman
 	(supply, demand)
 	
 
-testNorthWestCornerInitialSolutionFinder taskNumer = 
+testNorthWestCornerInitialSolutionFinder taskNumber = 
 	putStr
 		(
 			normal2DArrayToString
@@ -21,5 +22,14 @@ testNorthWestCornerInitialSolutionFinder taskNumer =
 			)
 		)
 	where
-		task = taskSet !! taskNumer
+		task = taskSet !! taskNumber
 		arguments = toNorthWestCornerInitialSolutionFinderArguments task
+
+testMinimalCostInitialSolutionFinder taskNumber = 
+	putStr
+		(
+			normal2DArrayToString
+			(
+				getMinimalCostInitialSolution (taskSet !! taskNumber)
+			)
+		)
