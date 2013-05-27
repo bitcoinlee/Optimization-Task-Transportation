@@ -1,2 +1,2 @@
 #!/bin/bash
-ghci -i../HaskellUtils -XFlexibleInstances
+ghci -i../HaskellUtils -XFlexibleInstances -XConstraintKinds
