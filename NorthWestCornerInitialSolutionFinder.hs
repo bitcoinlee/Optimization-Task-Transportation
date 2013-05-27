@@ -11,7 +11,7 @@ import MyTrace
 import TransportationTaskCommon
 
 data IterationArguments x = IterationArguments (NormalArray x) (NormalArray x) Int Int
-type IterationResult x = [((Int, Int), x)]
+type IterationResult x = Normal2DArrayGenerationList x
 
 performIteration :: (Element t) => IterationArguments t -> IterationResult t
 performIteration (IterationArguments supply demand supplyIndex demandIndex) =
@@ -47,22 +47,14 @@ performIteration (IterationArguments supply demand supplyIndex demandIndex) =
 		-- in function they can be only referred to inside the if block which checks the indices
 		currentSupply = extractArrayElement supply supplyIndex
 		currentDemand = extractArrayElement demand demandIndex
-	
-	
-iterationResultToArrayMatrix :: (Element t) => IterationResult t -> Int -> Int -> Normal2DArray t
-iterationResultToArrayMatrix iterationResult supplyHeight demandWidth = 
-	array 
-		((0, 0), (supplyHeight - 1, demandWidth - 1))
-		[ ((y, x), 0) | y <- [0 .. supplyHeight - 1], x <- [0 .. demandWidth - 1] ]
-	//
-	iterationResult
-					
+
 --эта функция находит начальное решение к транспортной задаче методом северо-западного угла 
 getNorthWestCornerInitialSolution :: (Element t) => NormalArray t -> NormalArray t -> Normal2DArray t
 getNorthWestCornerInitialSolution supply demand = 
-	iterationResultToArrayMatrix 
+	generate2DArray 
 		resultAsList
 		(count supply) 
 		(count demand)
+		0
 	where
 		resultAsList = performIteration (IterationArguments supply demand 0 0)
