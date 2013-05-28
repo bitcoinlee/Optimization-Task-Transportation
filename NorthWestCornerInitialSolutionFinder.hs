@@ -49,8 +49,10 @@ performIteration (IterationArguments supply demand supplyIndex demandIndex) =
 		currentDemand = extractArrayElement demand demandIndex
 
 --эта функция находит начальное решение к транспортной задаче методом северо-западного угла 
-getNorthWestCornerInitialSolution :: (Element t) => NormalArray t -> NormalArray t -> Normal2DArray t
-getNorthWestCornerInitialSolution supply demand = 
+getNorthWestCornerInitialSolutionS :: 
+	(Element t) => 
+		NormalArray t -> NormalArray t -> Normal2DArray t
+getNorthWestCornerInitialSolutionS supply demand = 
 	generate2DArray 
 		resultAsList
 		(count supply) 
@@ -58,3 +60,9 @@ getNorthWestCornerInitialSolution supply demand =
 		0
 	where
 		resultAsList = performIteration (IterationArguments supply demand 0 0)
+		
+getNorthWestCornerInitialSolution ::
+	(Element t) => TransportationTask t -> Normal2DArray t
+getNorthWestCornerInitialSolution (TransportationTask supply demand costs) =
+	getNorthWestCornerInitialSolutionS supply demand
+

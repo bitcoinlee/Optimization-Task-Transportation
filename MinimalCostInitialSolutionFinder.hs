@@ -96,6 +96,14 @@ goIterate supply demand costs =
 		desiredDemand = demand ! demandIndex
 		supplyReleased = desiredSupply < desiredDemand
 		amountToRelease = if supplyReleased then desiredSupply else desiredDemand
+		traceEnabled = False
+		trace message x = 
+			if
+				traceEnabled
+			then
+				MyTrace.trace message x
+			else
+				x
 
 getMinimalCostInitialSolution :: 
 	(Element t) => TransportationTask t -> Normal2DArray t
@@ -112,3 +120,11 @@ getMinimalCostInitialSolution (TransportationTask supply demand costs) =
 	where
 		resultAsArrayGenerationList = 
 			goIterate supply demand costs
+		traceEnabled = False
+		trace message x = 
+			if 
+				traceEnabled
+			then
+				MyTrace.trace message x
+			else
+				x

@@ -5,6 +5,7 @@ import MyArrayUtils
 import TransportationTaskCommon
 import NorthWestCornerInitialSolutionFinder
 import MinimalCostInitialSolutionFinder
+import EvaluateSolution
 import TestSet
 
 toNorthWestCornerInitialSolutionFinderArguments :: 
@@ -12,24 +13,19 @@ toNorthWestCornerInitialSolutionFinderArguments ::
 toNorthWestCornerInitialSolutionFinderArguments (TransportationTask supply demand costs) =
 	(supply, demand)
 	
+defaultElementWidth = 3
 
-testNorthWestCornerInitialSolutionFinder taskNumber = 
+testInitialSolutionFinder taskNumber finder = 
 	putStr
 		(
-			normal2DArrayToString
-			(
-				getNorthWestCornerInitialSolution (fst arguments) (snd arguments)
-			)
+			normal2DArrayToString solution defaultElementWidth
+			++
+			"Total cost: " ++ show (evaluateSolution costs solution)
+			++
+			"\n"
 		)
 	where
-		task = taskSet !! taskNumber
-		arguments = toNorthWestCornerInitialSolutionFinderArguments task
+		task = taskSet !! taskNumber 
+		(TransportationTask supply demand costs) = task
+		solution = finder task
 
-testMinimalCostInitialSolutionFinder taskNumber = 
-	putStr
-		(
-			normal2DArrayToString
-			(
-				getMinimalCostInitialSolution (taskSet !! taskNumber)
-			)
-		)
