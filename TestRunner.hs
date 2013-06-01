@@ -5,6 +5,7 @@ import MyArrayUtils
 import TransportationTaskCommon
 import NorthWestCornerInitialSolutionFinder
 import MinimalCostInitialSolutionFinder
+import FogelInitialSolutionFinder
 import EvaluateSolution
 import TestSet
 

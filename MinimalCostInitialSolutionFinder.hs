@@ -11,8 +11,8 @@ import MyTrace
 
 goFindMinimum ::
 	(Element t) 
-		=> NormalArray t -> NormalArray t -> Normal2DArray t -> Normal2DArrayIndexedElement' t
-goFindMinimum supply demand costs =
+		=> (TransportationTask t) -> Normal2DArrayIndexedElement' t
+goFindMinimum (TransportationTask supply demand costs) =
 	normal2DArrayExtractSpecificElement	costs findDesired	
 	where
 		exhausted (Normal2DArrayIndexedElement' index _ ) =
@@ -62,64 +62,24 @@ goFindMinimum supply demand costs =
 
 goIterate :: 
 	(Element t) => 
-		NormalArray t -> NormalArray t -> Normal2DArray t -> Normal2DArrayGenerationList t
-goIterate supply demand costs =
-	trace
-		("<goIterate " ++ show supply ++ " " ++ show demand ++ ">")
-		(
-			if 
-				desiredCell == NoNormal2DArrayIndexedElement
-			then
-				[] -- the cycle is over
-			else
-				((supplyIndex, demandIndex), amountToRelease)
-				:
-				goIterate
-					(
-						supply
-						// 
-						[(supplyIndex, if supplyReleased then 0 else desiredSupply - desiredDemand)]
-					)
-					(
-						demand
-						// 
-						[(demandIndex, if supplyReleased then desiredDemand - desiredSupply else 0)]
-					)
-					costs 
-		)
-	where
-		desiredCell = goFindMinimum supply demand costs
-		(Normal2DArrayIndexedElement' desiredIndex desiredValue) = desiredCell
-		supplyIndex = fst desiredIndex
-		demandIndex = snd desiredIndex
-		desiredSupply = supply ! supplyIndex
-		desiredDemand = demand ! demandIndex
-		supplyReleased = desiredSupply < desiredDemand
-		amountToRelease = if supplyReleased then desiredSupply else desiredDemand
-		traceEnabled = False
-		trace message x = 
-			if
-				traceEnabled
-			then
-				MyTrace.trace message x
-			else
-				x
+		(TransportationTask t) -> Normal2DArrayGenerationList t
+goIterate task =
+	commonMinimalSolutionIteration task goFindMinimum
 
-getMinimalCostInitialSolution :: 
-	(Element t) => TransportationTask t -> Normal2DArray t
-getMinimalCostInitialSolution (TransportationTask supply demand costs) = 
+getMinimalCostInitialSolution :: (Element t) => TransportationTask t -> Normal2DArray t
+getMinimalCostInitialSolution task@(TransportationTask supply demand _)  = 
 	generate2DArray 
 		(
 			trace 
 				(show resultAsArrayGenerationList)
 				resultAsArrayGenerationList
 		)
-		(count supply) 
-		(count demand) 
+		(count (NormalArray' supply)) 
+		(count (NormalArray' demand))
 		0
 	where
 		resultAsArrayGenerationList = 
-			goIterate supply demand costs
+			goIterate task
 		traceEnabled = False
 		trace message x = 
 			if 

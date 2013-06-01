@@ -16,7 +16,7 @@ type IterationResult x = Normal2DArrayGenerationList x
 performIteration :: (Element t) => IterationArguments t -> IterationResult t
 performIteration (IterationArguments supply demand supplyIndex demandIndex) =
 	if 
-		(supplyIndex < count supply) && (demandIndex < count demand) 
+		(supplyIndex < count (NormalArray' supply)) && (demandIndex < count (NormalArray' demand)) 
 	then
 		if
 			currentDemand < currentSupply
@@ -55,8 +55,8 @@ getNorthWestCornerInitialSolutionS ::
 getNorthWestCornerInitialSolutionS supply demand = 
 	generate2DArray 
 		resultAsList
-		(count supply) 
-		(count demand)
+		(count (NormalArray' supply)) 
+		(count (NormalArray' demand))
 		0
 	where
 		resultAsList = performIteration (IterationArguments supply demand 0 0)
